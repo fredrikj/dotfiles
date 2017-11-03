@@ -177,7 +177,6 @@ set tags=$HOME/.ctagsfile
 set titlestring=vim\ [%f]
 set vb t_vb=
 set viminfo=
-"silent! chdir /opt/ardome/lib/perl/ARDOME
 set number
 set foldenable
 set foldmethod=indent
@@ -219,15 +218,6 @@ nnoremap <S-Right> <C-w>\|
 nnoremap <S-Left> <C-w>=
 nnoremap <S-Down> <C-w>=
 
-nnoremap sa :w<CR>:!sudo ardemctl restart apache %<CR>
-nnoremap st :w<CR>:!ardemctl status apache %<CR>
-
-nmap ,1 :chdir /opt/ardome/lib/perl/ARDOME<cr>
-nmap ,2 :chdir /opt/ardome<cr>
-nmap ,3 :chdir /var/ardendo/trace<cr>
-nmap ,4 :chdir /var/ardendo/log/cgi<cr>
-nmap ,5 :!ardemctl status<cr>
-nmap ,6 :e /opt/ardome/db/default/table-descriptions.txt<cr>
 nmap ,e :Explore<cr>
 nmap ,t :tabnew<cr>
 
@@ -288,89 +278,6 @@ endfunction
 command! -complete=shellcmd -nargs=* -bang Shell call s:ExecuteInShell(<q-args>, '<bang>')
 cabbrev shell Shell
 
-"" Add these kind of things to .vim/ftplugin/javascript.vim e.g. :
-"  "nnoremap f :w<CR>:!perlcheck %<CR>
-"nnoremap f :w<CR>:Shell node %<CR>zn<C-w>k
-"nnoremap ff :w<CR>:Shell perl -w %<CR>
-"nnoremap F :w<CR>:Shell cachemgr clear;ardrepl -dddd %<CR>
-"nnoremap t :w<CR>:Shell quack --loglevel 9 -fp %<CR>
-"nnoremap T :w<CR>:Shell quack -p %<CR>
-"nnoremap FF :w<CR>:Shell ardrepl -ddddd %<CR>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Shows a blame window for the currently loaded file.
-" @return void
-""
-command Blame call SvnBlame_blameCurrentFile()
-
-function SvnBlame_blameCurrentFile()
-  set nofoldenable
-  let fileName = expand('%')
-  if match(fileName, "_svnBlame$") == -1
-    let blameBufferName = fileName."_svnBlame"
-    let blameBuffer = bufnr(blameBufferName)
-    if blameBuffer == -1
-      call SvnBlame_openBlameBuffer(fileName, blameBufferName)
-    else
-      wincmd w
-      call SvnBlame_execPreserveNum('bwipeout '.blameBuffer)
-    endif
-  else
-    " We're in a blame buffer, so close it.
-    call SvnBlame_execPreserveNum('bwipeout '.fileName)
-  endif
-endfunction
-
-""
-" Execs the given command, preserving numbering
-" @param string commandString
-" @return void
-function SvnBlame_execPreserveNum(commandString)
-  if &number == 1
-    let numbered = 1
-  else
-    let numbered = 0
-  endif
-  exe a:commandString
-  if numbered == 1
-    set nu
-  endif
-endfunction
-
-""
-" Opens up a blame buffer called blameBufferName for the given fileName
-" @param string fileName The filename to blame
-" @param string blameBufferName The name to use for the blame buffer
-" @return void
-function SvnBlame_openBlameBuffer(fileName, blameBufferName)
-  set scrollbind
-  set nowrap
-  call SvnBlame_execPreserveNum("15vnew ".a:blameBufferName)
-  " Current window is now the blame buffer
-  setlocal buftype=nofile
-  setlocal nobuflisted
-  setlocal bufhidden=hide
-  setlocal noswapfile
-  setlocal autoread
-  set scrollbind
-  set nowrap
-  "Set filetype so that any special syntax files can be included.
-  setf blame
-  "execute 'silent read !svn blame '.a:fileName.' | sed -e ''s/\(\s*[0-9]*\)\s*\([a-z]*\).*/\1 \2/'''
-  execute 'silent read !bzr blame '.a:fileName.' | sed ''s/^\([^|]*\)|.*/\1/'''
-  "Delete first line, which is empty.
-  1d
-  "Make the buffer non-modifiable.
-  setlocal nomodifiable
-  "Switching out, in then out of the blame buffer seems to force an auto-resize.
-  wincmd w
-  wincmd w
-  wincmd w
-  set nonu
-endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 nnoremap qu :q<CR>
