@@ -1,2 +1,5 @@
 set nocompatible
 
+" use system clipboard for yank/paste
+set clipboard=unnamed
+
