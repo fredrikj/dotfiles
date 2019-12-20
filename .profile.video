@@ -1,0 +1,123 @@
+alias silentffmpeg='ffmpeg -loglevel error'
+
+function webmTomp4() {
+  silentffmpeg -i $1 -vsync 0 $(basename $1 .webm).mp4
+}
+
+function ffprobe_frames() {
+  ffprobe -loglevel panic -select_streams v -show_frames -show_error $1
+}
+
+function ffprobe_video_stream() {
+  ffprobe -loglevel panic -select_streams v -show_streams $1
+}
+
+function ffprobe_container_duration() {
+  ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 $1
+}
+
+function ffprobe_stream_duration() {
+  ffprobe -v error -select_streams v:0 -show_entries stream=duration -of default=noprint_wrappers=1:nokey=1 $1
+}
+
+function ffmpeg_duration() {
+  ffmpeg -i $1 -f null - 2>&1 | tail -n 2 | head -n 1
+}
+
+function ffprobe_framerate() {
+  ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of default=noprint_wrappers=1:nokey=1 $1
+}
+
+function countframes() {
+  ffprobe_video_stream $1 | grep nb_frames | head -1 | cut -d \= -f 2
+}
+
+function videoToimage() {
+  silentffmpeg -ss $2 -i $1 -vframes 1 -q:v 2 $(basename $1 .mp4)-$2s.jpg
+}
+
+function videoToimageSlow() {
+  silentffmpeg -i $1 -ss $2 -vframes 1 -q:v 2 $(basename $1 .mp4)-$2s.jpg
+}
+
+function firstframe() {
+  silentffmpeg -i $1 -vframes 1 -f image2 $(basename $1 .mp4)-first.jpg
+}
+
+function nframes() {
+  mkdir -p frames
+  silentffmpeg -i $1 -vframes $2 -f image2 frames/$(basename $1 .mp4)-frame%05d.jpg
+}
+
+function ntimeframes() {
+  mkdir -p frames
+  silentffmpeg -i $1 -vf fps=$3 -vframes $2 frames/$(basename $1 .mp4)-frame%04ds.jpg
+}
+
+function ntimeallframes() {
+  mkdir -p frames
+  silentffmpeg -i $1 -vf fps=$2 frames/$(basename $1 .mp4)-frame%04ds.jpg
+}
+
+function allframes() {
+  silentffmpeg -i $1 $(basename $1 .mp4)-thumb%04d.jpg
+}
+
+function lastframe() {
+  lf=$(countframes $1)
+  let "lf = $lf - 1"
+  silentffmpeg -i $1 -vf select=\'eq\(n,$lf\) -vframes 1 $(basename $1 .mp4)-last.jpg
+}
+
+function extractAll() {
+  for i in *.webm; do webmTomp4 $i; done
+  for i in *.mp4; do firstframe $i; done
+  for i in *.mp4; do lastframe $i; done
+  for i in *.mp4; do echo -n $i;  countframes $i; done
+}
+
+#Notes
+# 1. twenty1 clock jump. evidence lost
+# 2. fps from ffmpeg is rounded. Don't use for calculation.
+# 3. pkt_duration seems useless. pkt_dts_time better then
+
+# twenty3:
+# Cam:
+# > ffprobe_frames (last frame) : 
+#  pkt_dts_time=1199.879000
+# > ffmpeg_duration twenty3-Cam-1200s.webm :
+#  frame=11919 fps=1753 q=-0.0 Lsize=N/A time=00:19:59.94 bitrate=N/A speed= 176x
+# Screen:
+# ❯ ffprobe_frames twenty3-Screen-1200s.webm| tail -n 25 | grep pkt_dts_time
+#  pkt_dts_time=1199.746000
+
+#--------------------------------------------------------------------------------
+# Moving ball with timestamp
+#--------------------------------------------------------------------------------
+
+# Works
+function toCircleParams() {
+  x=$1
+  y=$2
+  (( otherx = $x + 30 ))
+  echo $x,$y $otherx,$y
+}
+
+# Works
+function paintBall() {
+  convert -size 1920x1080 canvas:grey -fill white -stroke black -draw "circle $(toCircleParams $@)" png:-
+}
+
+# Works
+function animateBall() {
+  while read line
+  do
+    args=( ${(z)line} )
+    paintBall $args
+  done
+}
+
+function images2Video() {
+  filter="drawtext=fontfile=./open-sans/OpenSans-Regular.ttf:fontcolor=white:fontsize=86:text='%{pts \:hms}':x=100:y=100"
+  silentffmpeg -f image2pipe -framerate 25 -i - -pix_fmt yuv420p -filter_complex $filter $1
+}
