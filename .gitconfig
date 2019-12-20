@@ -1,0 +1,23 @@
+[includeIf "gitdir:~/git/firecloud/"]
+    path = ~/git/firecloud/support-firecloud/generic/dot.gitconfig
+[user]
+	email = fredrik.johansson@tobii.com
+	name = Fredrik Johansson (fjon)
+	signingkey = 4C927643639E1F94
+[core]
+	excludesfile = /Users/fred/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[rerere]
+    autoupdate          = true
+    enabled             = false
+[log]
+    graphColors = white,magenta,cyan
+[gpg]
+    program = /usr/local/MacGPG2/bin/gpg2
+[commit]
+	gpgsign = true
