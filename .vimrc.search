@@ -1,0 +1,12 @@
+set nocompatible
+
+nmap ) *:Egrep -Irnsa  --exclude-dir={.git,node_modules} --exclude={'*.min.*','*.map'} <C-r>/ *<CR>
+vmap ) *:Egrep -Irnsa  --exclude-dir={.git,node_modules} --exclude={'*.min.*','*.map'} <C-r>/ *<CR>
+nmap ( *:Egrep -Irinsa --exclude-dir={.git,node_modules} --exclude={'*.min.*','*.map'}
+"nnoremap ( :MyGrep <C-r>/ *<CR>
+
+" nmap <silent> ) :vimgrep '<C-r>/' *<CR>
+"   \:cw<CR>
+" " Works better, but I still don't understand the quickfix window
+" vmap <silent> ) *:vimgrep '<C-r>/' *<CR>
+"   \:cw<CR>
