@@ -8,7 +8,7 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 
 "   " The following are examples of different formats supported.
 "   " Keep Plugin commands between vundle#begin/end.
@@ -39,20 +39,21 @@ Plugin 'vim-scripts/gitignore'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'JamshedVesuna/vim-markdown-preview'
 
-Plugin 'scrooloose/syntastic'
+Plugin 'vim-syntastic/syntastic'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'jbnicolai/vim-AnsiEsc'
 
-Plugin 'SirVer/ultisnips'
+"Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+Plugin 'dense-analysis/ale'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 
 " Ultisnips: Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<c-l>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+"let g:UltiSnipsExpandTrigger="<c-l>"
+"let g:UltiSnipsJumpForwardTrigger="<c-j>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 let vim_markdown_preview_github=1
@@ -73,15 +74,9 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_typescript_checkers = ['eslint']
 
-function! HasConfig(file, dir)
-    return findfile(a:file, escape(a:dir, ' ') . ';') !=# ''
-endfunction
-
-autocmd BufNewFile,BufReadPre *.js  let b:syntastic_checkers =
-    \ HasConfig('.eslintrc', expand('<amatch>:h')) ? ['eslint'] :
-    \ HasConfig('.jshintrc', expand('<amatch>:h')) ? ['jshint'] :
-    \     ['standard']
 "----------------------------------------------
 
 " Automatically start NERDTree when Vim starts
@@ -145,45 +140,6 @@ autocmd BufNewFile	*.spec	call SKEL_spec()
 """
 """ SETTINGS
 """
-set autoindent
-set backspace=indent,eol,start
-set encoding=utf8
-set expandtab
-set fileencoding=utf8
-set fileformat=unix
-set fileformats=unix
-set hlsearch
-set linebreak
-set modeline
-set mouse=
-set nobackup
-set nocindent
-set wrap
-set nowrapscan
-set ruler
-set scrolloff=10
-set shiftwidth=2 "indentation size
-set showbreak=>>\ 
-set showcmd
-if version >= 700
-    set showtabline=2
-endif
-set notitle
-set smartindent 
-set softtabstop=4
-set tabstop=4
-set tags=$HOME/.ctagsfile
-"set textwidth=78
-set titlestring=vim\ [%f]
-set vb t_vb=
-set viminfo=
-set number
-set foldenable
-set foldmethod=indent
-set ignorecase
-set incsearch
-"set shell=bash\ --login "to source .bashrc when running command
-set shell=zsh
 
 """
 """ xterm
@@ -205,24 +161,13 @@ endif
 """
 """ KEY MAPPINGS
 """
-nnoremap ; :w<CR>
-nnoremap J <C-w>j
-nnoremap K <C-w>k
-nnoremap H <C-w>h
-nnoremap L <C-w>l 
 "nnoremap <CR> :nohlsearch<CR>
 
 "nnoremap M <C-w>_<C-w>\|
-nnoremap <S-Up> <C-w>_
-nnoremap <S-Right> <C-w>\|
-nnoremap <S-Left> <C-w>=
-nnoremap <S-Down> <C-w>=
 
 nmap ,e :Explore<cr>
 nmap ,t :tabnew<cr>
 
-" Open a file under the cursor in a new split
-nmap gf :sp <cfile><CR>nzo
 
 """
 """ NetRW settings
@@ -237,8 +182,7 @@ let g:netrw_longlist=2
 """ Color load
 """
 syntax on
-colorscheme fkj
-set cursorline
+colorscheme afterglow
 "hi CursorLine   cterm=NONE ctermbg=lightyellow ctermfg=black guibg=lightyellow guifg=black
 autocmd WinEnter * setlocal cursorline
 autocmd WinLeave * setlocal nocursorline
@@ -279,10 +223,6 @@ command! -complete=shellcmd -nargs=* -bang Shell call s:ExecuteInShell(<q-args>,
 cabbrev shell Shell
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-nnoremap qu :q<CR>
-nnoremap qi :q<CR>
-nnoremap zi :q<CR>
 
 "set statusline=%<%w%f\ %=%y[%{&ff}][%6c][%{printf('%'.strlen(line('$')).'s',line('.'))}/%L][%3p%%]%{'['.(&readonly?'RO':'\ \ ').']'}%{'['.(&modified?'+':'-').']'}
 
@@ -338,6 +278,9 @@ vnoremap <silent> # :<C-U>
 nnoremap <silent> * :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<CR>
   \:call histadd("/",@/)<CR>
 
-nmap ) *:Egrep -Irnsa  --exclude-dir={tmp,log,.svn,.git,node_modules,lib} --exclude={'*.min.*','*.map'} <C-r>/ *<CR>
-vmap ) *:Egrep -Irnsa  --exclude-dir={tmp,log,.svn,.git,node_modules,lib} --exclude={'*.min.*','*.map'} <C-r>/ *<CR>
-nmap ( *:Egrep -Irinsa --exclude-dir={tmp,log,.svn,.git,node_modules,lib} --exclude={'*.min.*','*.map'}
+nmap ) *:Egrep -Irnsa  --exclude-dir={tmp,log,.svn,.git,node_modules,lib,package.dir} --exclude={'*.min.*','*.map','*.zip'} <C-r>/ *<CR>
+vmap ) *:Egrep -Irnsa  --exclude-dir={tmp,log,.svn,.git,node_modules,lib,package.dir} --exclude={'*.min.*','*.map','*.zip'} <C-r>/ *<CR>
+nmap ( *:Egrep -Irinsa --exclude-dir={tmp,log,.svn,.git,node_modules,lib,package.dir} --exclude={'*.min.*','*.map','*.zip'}
+
+
+nnoremap f :YcmCompleter FixIt<CR>

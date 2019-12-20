@@ -1,5 +1,76 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Common appearance/behavior
 set nocompatible
+set number
+set foldenable
+set foldmethod=indent
+set ignorecase
+set incsearch
 
+set cursorline
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" KEY MAPPINGS
+" Closing
+nnoremap qu :q<CR>
+nnoremap qi :q<CR>
+nnoremap zi :q<CR>
+
+" Saving
+nnoremap ; :w<CR>
+
+" Split navigation
+nnoremap J <C-w>j
+nnoremap K <C-w>k
+nnoremap H <C-w>h
+nnoremap L <C-w>l 
+
+" Split resizing
+nnoremap <S-Up> <C-w>_
+nnoremap <S-Right> <C-w>\|
+nnoremap <S-Left> <C-w>=
+nnoremap <S-Down> <C-w>=
+
+" Open a file under the cursor in a new split
+nmap gf :sp <cfile><CR>nzo
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
 " use system clipboard for yank/paste
 set clipboard=unnamed
 
+set autoindent
+set backspace=indent,eol,start
+set encoding=utf8
+set expandtab
+set fileencoding=utf8
+set fileformat=unix
+set fileformats=unix
+set hlsearch
+set linebreak
+set modeline
+set mouse=
+set nobackup
+set nocindent
+set wrap
+set nowrapscan
+set ruler
+set scrolloff=10
+set shiftwidth=2 "indentation size
+set showbreak=>>\ 
+set showcmd
+if version >= 700
+    set showtabline=2
+endif
+set notitle
+set smartindent 
+set softtabstop=4
+set tabstop=4
+set tags=$HOME/.ctagsfile
+"set textwidth=78
+set titlestring=vim\ [%f]
+set vb t_vb=
+set viminfo=
+"set shell=bash\ --login "to source .bashrc when running command
+set shell=zsh
+
+set wildignore=node_modules

@@ -16,16 +16,19 @@ endif
 let g:colors_name = "afterglow"
 
 " Default GUI Colours
-let s:foreground = "d6d6d6"
-let s:background = "1a1a1a"
+let s:foreground = "c6c6c6"
+let s:background = "2a2a2a"
+let s:foldbackground = "3a3a3a"
 let s:selection = "5a647e"
 let s:line = "393939"
 let s:comment = "797979"
 let s:red = "ac4142"
 let s:orange = "e87d3e"
 let s:yellow = "e5b567"
+let s:darkyellow = "b58537"
 let s:green = "b4c973"
 let s:blue = "6c99bb"
+let s:darkblue = "3c698b"
 let s:wine = "b05279"
 let s:purple = "9e86c8"
 let s:window = "4d5057"
@@ -257,7 +260,7 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
     call <SID>X("Question", s:green, "", "")
     call <SID>X("WarningMsg", s:orange, "", "bold")
     call <SID>X("MatchParen", "", s:selection, "")
-    call <SID>X("Folded", s:comment, s:background, "")
+    call <SID>X("Folded", s:comment, s:foldbackground, "")
     call <SID>X("FoldColumn", "", s:background, "")
     if version >= 700
         call <SID>X("CursorLine", "", s:line, "underline")
@@ -272,15 +275,15 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 
     " Standard Highlighting
     call <SID>X("Title", s:comment, "", "bold")
-    call <SID>X("Identifier", s:orange, "", "")
+    call <SID>X("Identifier", s:darkblue, "", "")
     call <SID>X("Statement", s:wine, "", "")
     call <SID>X("Conditional", s:wine, "", "")
     call <SID>X("Repeat", s:wine, "", "")
     call <SID>X("Structure", s:wine, "", "")
     call <SID>X("Function", s:orange, "", "")
     call <SID>X("Constant", s:purple, "", "")
-    call <SID>X("Keyword", s:orange, "", "")
-    call <SID>X("String", s:yellow, "", "")
+    call <SID>X("Keyword", s:blue, "", "")
+    call <SID>X("String", s:darkyellow, "", "")
     call <SID>X("Special", s:blue, "", "")
     call <SID>X("PreProc", s:green, "", "")
     call <SID>X("Operator", s:purple, "", "")

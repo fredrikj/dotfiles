@@ -1,0 +1,13 @@
+source ~/.vimrc.common
+
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'jbnicolai/vim-AnsiEsc'
+call vundle#end()
+filetype plugin indent on 
+
+syntax on
+colorscheme fkj
