@@ -1,0 +1,5 @@
+source ~/.vimrc
+nnoremap f :w<CR>:Shell node --experimental-modules --no-warnings %<CR>zn<C-w>k
+"nnoremap f :w<CR>:Shell babel-node %<CR>zn<C-w>k
+"nnoremap t :w<CR>:Shell mocha --no-colors %<CR>zn<C-w>k
+

@@ -1,0 +1,4 @@
+source ~/.vimrc
+set autoread
+nnoremap f :w<CR>:Shell tsc -t ESNEXT --moduleResolution node %<CR>zn<C-w>k<C-w>l<C-w>k:Shell node -r esm %<CR>zn<C-w>j:set ft=text<CR>:set nonu<CR><C-w>k<C-w>h
+
