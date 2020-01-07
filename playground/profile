@@ -1,0 +1,29 @@
+function tsession() {
+  if [[ -a $1.ts ]]; then
+    file=$1.ts
+  elif [[ -a $1 ]]; then
+    file=$1
+  else
+    file=$1.ts
+  fi
+  sessionname=$(basename $file .ts)
+  vim -c "vs $file" -u ~/playground2/vimrc.typescript-session $sessionname.js
+}
+
+# negative file exists:
+# if ! [[ -a $1.js ]]; then
+function jsession() {
+  if [[ -a $1.js ]]; then
+    file=$1.js
+  elif [[ -a $1 ]]; then
+    file=$1
+  else
+    file=$1.js
+    if [[ -a ~/playground/tlog.js ]]; then
+      echo "let log = require('/Users/fred/playground/tlog.js');" > $file
+    fi
+  fi
+  vim -u ~/playground2/vimrc.javascript-session $file
+}
+
+
