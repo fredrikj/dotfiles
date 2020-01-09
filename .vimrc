@@ -39,7 +39,6 @@ Plugin 'vim-scripts/gitignore'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'JamshedVesuna/vim-markdown-preview'
 
-Plugin 'vim-syntastic/syntastic'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'jbnicolai/vim-AnsiEsc'
 
@@ -64,20 +63,6 @@ let g:typescript_compiler_binary = 'tsc'
 let g:typescript_compiler_options = ''
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
-
-" Syntastic settings -------------------------
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_typescript_checkers = ['eslint']
-
-"----------------------------------------------
 
 " Automatically start NERDTree when Vim starts
 "autocmd vimenter * NERDTree
