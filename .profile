@@ -121,7 +121,7 @@ function logSinceSplit() {
 }
 
 # Diary
-alias diary='vim ~/diary.txt -u ~/.vimrc.diary'
+alias diary='nvim ~/diary.txt'
 
 # Jobs
 alias j='jobs'
