@@ -6,6 +6,7 @@ endif
 
 call plug#begin()
 Plug 'tpope/vim-sensible'
+Plug 'jeetsukumaran/vim-filebeagle'
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -26,6 +27,10 @@ set smartindent       " Do smart autoindenting (C style) when starting a new lin
 set visualbell        " Use visual bell instead of beeping.
 set shell=zsh         " Use zsh
 set wildignore=node_modules
+highlight StatusLine   ctermfg=15  guifg=#ffffff ctermbg=242 guibg=#4e4e4e cterm=bold gui=bold
+highlight StatusLineNC ctermfg=gray guifg=#b2b2b2 ctermbg=237 guibg=#3a3a3a cterm=none gui=none
+autocmd WinEnter * set cursorline
+autocmd WinLeave * set nocursorline
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 " KEY MAPPINGS
